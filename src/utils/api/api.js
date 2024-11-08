@@ -39,6 +39,15 @@ exports.authFan = (url, data) =>
   })
 
 
+exports.resetPassword = (url, data) =>
+  api.post(url, data).then((res, rej) => {
+    if (rej) console.log(rej)
+    return res
+  }).catch(e => {
+    console.error(e);
+    return false;
+  })
+
 exports.getWatchDetail = (watchId, setCollectionState, setWatchData, collectionFilter) =>
   api.get(`/watch-detail/${watchId}`).then(res => {
     setCollectionState(collectionFilter(res.data))

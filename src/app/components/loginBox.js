@@ -13,7 +13,7 @@ function LoginBox({ onSubmit, onError = (e) => {
         required: ['username', 'password'],
         properties: {
             username: { type: 'string', title: 'Username', minLength: 2 },
-            password: { type: 'string', title: 'Password', minLength: 2 },
+            password: { type: 'string', format: "password", title: 'Password', minLength: 2 },
         },
     };
 

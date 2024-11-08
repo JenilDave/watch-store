@@ -162,35 +162,6 @@ function page(props) {
           <LoginBox onSubmit={({ formData }) => {
             handleLogin(formData);
           }} />
-          <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 20 }}>
-            Login Fan Account
-          </Typography>
-          <Box display={"grid"} alignItems={"center"} width={300}>
-            <TextField
-              required
-              fullWidth
-              id="outlined-basic"
-              label="Username"
-              variant="outlined"
-              margin="normal"
-              onChange={(e) => setFanDetails({ ...fanDetails, username: e.target.value })}
-            />
-            <TextField
-              required
-              fullWidth
-              id="outlined-password-input"
-              label="Password"
-              type="password"
-              margin="normal"
-              autoComplete="current-password"
-              onChange={(e) => setFanDetails({ ...fanDetails, password: e.target.value })}
-            />
-            <Button
-              disabled={!(fanDetails.username && fanDetails.password)}
-              onClick={handleLogin}>
-              Submit
-            </Button>
-          </Box>
         </>
       )}
     </div>
