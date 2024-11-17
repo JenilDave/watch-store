@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useState } from 'react';
 import ResetPasswordBox from "../components/resetPasswordBox";
 
-
 function ForgotPassword() {
 
     const router = useRouter();

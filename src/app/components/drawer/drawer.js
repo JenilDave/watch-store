@@ -22,8 +22,9 @@ const drawerWidth = 240;
 
 export default function SideDrawer() {
     const [open, setOpen] = useState(false);
+    const [authKey, setAuthKey] = useState('{}');
     const pathname = usePathname();
-    const drawerItems = [
+    const [drawerItems, setDrawerItems] = useState([
         {
             label: "Home",
             route: "/"
@@ -39,12 +40,8 @@ export default function SideDrawer() {
         {
             label: "Edit Watch",
             route: "/edit-watch/",
-        },
-        {
-            label: "Fan Login",
-            route: "/login",
         }
-    ]
+    ])
     const [drawerLabel, setDrawerLabel] = useState(drawerItems.filter(e => pathname.includes(e.route))[0].label)
 
     const handleDrawerOpen = () => {
@@ -59,8 +56,23 @@ export default function SideDrawer() {
 
     useEffect(() => {
         setDrawerLabel(drawerItems.filter(e => getPathName().includes(e.route))[0].label)
-            , []
-    })
+        let authKey = ""
+        if (typeof window !== 'undefined') {
+            authKey = JSON.parse(localStorage.getItem("authKey"));
+        }
+        if (authKey === "{}") {
+            setDrawerItems([...drawerItems.slice(0,4), {
+                label: "Fan Login",
+                route: "/login",
+            }])
+        }
+        else {
+            setDrawerItems([...drawerItems.slice(0,4), {
+                label: "Logout",
+                route: "/logout",
+            }])
+        }
+    }, [open])
 
     return (
         <>
