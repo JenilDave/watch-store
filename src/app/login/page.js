@@ -1,7 +1,9 @@
 "use client";
 
-import { addFan, authFan } from "@/utils/api/api";
+import { addFan, authFan, getFavourites } from "@/utils/api/api";
 import useLocalStorage from "@/utils/hooks/useLocalStorage";
+import { useAppDispatch } from "@/utils/store/hook";
+import { addUser } from "@/utils/store/usersSlice";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Tab, Tabs, TextField, Typography } from "@mui/material";
 import { isEmpty } from "lodash";
 import { useRouter } from "next/navigation";
@@ -18,6 +20,7 @@ function page(props) {
   const [gender, setGender] = useState("");
   const [tabIndex, setTabIndex] = useState("1");
   const [authKey, setAuthKey] = useLocalStorage("authKey", "")
+  const dispatch = useAppDispatch();
 
   function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
@@ -35,9 +38,16 @@ function page(props) {
   const handleLogin = (fanDetails) => {
     authFan('/login', fanDetails).then(resp => {
       setAuthKey(resp.data);
-      if (resp) {
-        router.push("/watches");
-      }
+    }).then((resp) => {
+      getFavourites(fanDetails.username).then(resp => {
+        if (resp) {
+          dispatch(addUser({
+            username: fanDetails.username,
+            favourites: resp,
+          }));
+          router.push("/watches");
+        }
+      })
     })
   }
 

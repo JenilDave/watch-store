@@ -56,9 +56,10 @@ export default function SideDrawer() {
 
     useEffect(() => {
         setDrawerLabel(drawerItems.filter(e => getPathName().includes(e.route))[0].label)
-        let authKey = ""
-        if (typeof window !== 'undefined') {
-            authKey = JSON.parse(localStorage.getItem("authKey"));
+        let authKey = "{}"
+        const localStVal = localStorage?.getItem("authKey")
+        if (typeof window !== 'undefined' && localStVal && localStVal !== 'undefined') {
+            authKey = JSON.parse(localStVal);
         }
         if (authKey === "{}") {
             setDrawerItems([...drawerItems.slice(0,4), {
@@ -108,7 +109,7 @@ export default function SideDrawer() {
                                 <ListItemIcon>
                                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                                 </ListItemIcon>
-                                <ListItemText primary={<Link href={text.route}>{text.label}</Link>} />
+                                <ListItemText primary={<Link href={text.route} onClick={handleDrawerClose}>{text.label}</Link>} />
                             </ListItemButton>
                         </ListItem>
                     ))}

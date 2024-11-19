@@ -8,6 +8,7 @@ export const baseURL = "http://localhost:3001";
 // axios.defaults.withCredentials = true;
 
 let authKey = ""
+// const localStVal = localStorage && localStorage.getItem("authKey")
 if (typeof window !== 'undefined') {
   authKey = JSON.parse(localStorage.getItem("authKey"));
 }

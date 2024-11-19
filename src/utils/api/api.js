@@ -59,5 +59,11 @@ exports.getWatchDetail = (watchId, setCollectionState, setWatchData, collectionF
     }
   })
 
+exports.getFavourites = (username) => {
+  return api.get(`/favourites/${username}`).then((res) => {
+    return res.data
+  })
+}
+
 
 exports.getWatchImgURL = (watchId) => `${baseURL}/watch-image/${watchId}`
