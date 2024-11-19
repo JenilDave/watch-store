@@ -65,5 +65,16 @@ exports.getFavourites = (username) => {
   })
 }
 
+exports.addFavourite = (username, favourite) => {
+  return api.post(`/add-favourites`, {
+    username, favourite
+  })
+}
+
+exports.removeFavourite = (username, favourite) => {
+  return api.post(`/remove-favourites`, {
+    username, favourite
+  })
+}
 
 exports.getWatchImgURL = (watchId) => `${baseURL}/watch-image/${watchId}`

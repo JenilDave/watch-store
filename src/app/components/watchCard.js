@@ -1,20 +1,45 @@
-import { getWatchImgURL } from "@/utils/api/api";
-import { useAppSelector } from "@/utils/store/hook";
-import { selectValue } from "@/utils/store/usersSlice";
+import { addFavourite, getWatchImgURL, removeFavourite } from "@/utils/api/api";
+import { useAppDispatch, useAppSelector } from "@/utils/store/hook";
+import { addUser } from "@/utils/store/usersSlice";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Card, CardActions, CardContent, CardMedia, Chip, Grid2, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 function WatchCard({ element, gridSize, data }) {
 
     const [favLoading, setFavLoading] = useState(false);
-    const addToFavourite = () => {
-        setTimeout(setFavLoading(true), 2);
-        setTimeout(setFavLoading(false), 7);
-    }
     const userFav = useAppSelector((state) => state.users.value);
+    const dispatch = useAppDispatch();
+    
+    const isFav = () => {
+        return userFav?.favourites?.includes(element.uid);
+    }
+
+    const addToFavourite = (e) => {
+        if (!isFav()) {
+            addFavourite(userFav.username, element.uid).then(resp => {
+                if(resp.status == 201) {
+                    dispatch(addUser({
+                        username: userFav.username,
+                        favourites: [...userFav.favourites, element.uid]
+                    }))
+                }
+            })
+        }
+        else {
+            removeFavourite(userFav.username, element.uid).then(resp => {
+                if(resp.status == 201) {
+                    dispatch(addUser({
+                        username: userFav.username,
+                        favourites: userFav.favourites.filter(elem => elem != element.uid)
+                    }))
+                }
+            })
+        }
+    }
+
 
     return <>
         <Grid2 key={`${element.id}`} size={gridSize[data?.length] || 3} display="flex" justifyContent="center" alignItems="center">
@@ -46,9 +71,9 @@ function WatchCard({ element, gridSize, data }) {
                     <LoadingButton
                         loading={favLoading}
                         loadingPosition="start"
-                        startIcon={userFav?.favourites?.includes(element.uid) ? <Favorite /> : <FavoriteBorder />}
+                        startIcon={isFav() ? <Favorite /> : <FavoriteBorder />}
                         variant="text"
-                        onClick={addToFavourite}
+                        onClick={(e) => addToFavourite(e)}
                     />
                 </CardActions>
             </Card>
